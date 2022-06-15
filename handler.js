@@ -1,7 +1,7 @@
 const pacientes = [
   {id: 1, nome: 'Maria', dataNascimento: '1984-01-11'},
-  {id: 2, nome: 'Josefina', dataNascimento: '1984-01-11'},
-  {id: 3, nome: 'Jose', dataNascimento: '1984-01-11'},
+  {id: 2, nome: 'Josefina', dataNascimento: '1980-01-16'},
+  {id: 3, nome: 'Jose', dataNascimento: '1998-06-06'},
 
 ]
 
@@ -23,7 +23,14 @@ module.exports.listarPacientes = async (event) => {
 module.exports.obterPaciente = async (event) => {
   const { pacienteId } = event.pathParameters
 
-  const paciente = pacientes.find((paciente) => paciente.id = pacienteId)
+  const paciente = pacientes.find((paciente) => paciente.id == pacienteId)
+
+  if(paciente === undefined) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({error: 'Paciente não existe'}, null, 2)
+    }
+  }
 
   return {
     statusCode: 200,
