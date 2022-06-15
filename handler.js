@@ -19,3 +19,15 @@ module.exports.listarPacientes = async (event) => {
   };
 
 };
+
+module.exports.obterPaciente = async (event) => {
+  const { pacienteId } = event.pathParameters
+
+  const paciente = pacientes.find((paciente) => paciente.id = pacienteId)
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(paciente, null, 2),
+  };
+
+};
