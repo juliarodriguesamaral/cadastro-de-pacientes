@@ -1,0 +1,53 @@
+{
+    "PACIENTES": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "data_nascimento": {
+                        "S": "1984-01-01"
+                    },
+                    "email": {
+                        "S": "humberto@mail.com"
+                    },
+                    "nome": {
+                        "S": "Humberto"
+                    },
+                    "paciente_id": {
+                        "S": "1234-abc"
+                    },
+                    "status": {
+                        "BOOL": true
+                    },
+                    "telefone": {
+                        "S": "11111111111"
+                    }
+                }
+            }
+        },
+
+        {
+            "PutRequest": {
+                "Item": {
+                    "data_nascimento": {
+                        "S": "1975-01-01"
+                    },
+                    "email": {
+                        "S": "josefina@mail.com"
+                    },
+                    "nome": {
+                        "S": "Josefina"
+                    },
+                    "paciente_id": {
+                        "S": "4321-abc"
+                    },
+                    "status": {
+                        "BOOL": true
+                    },
+                    "telefone": {
+                        "S": "11111111111"
+                    }
+                }
+            }
+        }
+    ]
+}
