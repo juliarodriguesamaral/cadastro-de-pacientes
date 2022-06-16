@@ -35,20 +35,41 @@ module.exports.listarPacientes = async (event) => {
 }
 
 module.exports.obterPaciente = async (event) => {
-  const { pacienteId } = event.pathParameters
 
-  const paciente = pacientes.find((paciente) => paciente.id == pacienteId)
+  try {
+    const { pacienteId } = event.pathParameters
 
-  if(paciente === undefined) {
+    const data = await dynamoDb
+      .get({
+        ... params,
+        Key: {
+          paciente_id: pacienteId
+        }
+      })
+      .promise()
+
+    if(!data.Item) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ error: 'Paciente não existe' }, null, 2)
+      }
+    }
+
+    const paciente = data.Item
+
     return {
-      statusCode: 404,
-      body: JSON.stringify({error: 'Paciente não existe'}, null, 2)
+      statusCode: 200,
+      body: JSON.stringify(paciente, null, 2)
+    }
+  } catch (err) {
+    console.log('Error', err)
+    return{
+      statusCode: err.statusCode ? err.statusCode : 500,
+      body: JSON.stringify({
+        error: err.name ? err.name : 'Exception',
+        message: err.message ? err.message : 'Unknown error'
+      })
     }
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(paciente, null, 2),
-  };
 
 };
