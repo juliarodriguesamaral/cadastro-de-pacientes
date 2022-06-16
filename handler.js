@@ -18,7 +18,7 @@ module.exports.listarPacientes = async (event) => {
     let data = await dynamoDb.scan(params).promise()
     return {
       statusCode: 200,
-      body: JSON.stringify(data)
+      body: JSON.stringify(data.Items)
     }
   } catch (err) {
     console.log("Error", err);
