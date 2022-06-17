@@ -34,6 +34,13 @@ functions:
           path: pacientes/{pacienteId}
           method: get
 
+  cadastrarPaciente:
+    handler: handler.cadastrarPaciente
+    events:
+      - http:
+          path: pacientes
+          method: post
+
 plugins:
   - serverless-offline
 

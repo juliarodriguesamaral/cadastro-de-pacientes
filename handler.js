@@ -6,6 +6,7 @@ const pacientes = [
 ]
 
 const AWS = require("aws-sdk")
+const { v4: uuidv4 } = require("uuid")
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 const params = {
@@ -73,3 +74,50 @@ module.exports.obterPaciente = async (event) => {
   }
 
 };
+
+module.exports.cadastrarPaciente = async (event) => {
+
+  try {
+    const timestamp = new Date().getTime()
+
+    let dados = JSON.parse(event.body)
+  
+    const {
+      nome, data_nascimento, email, telefone
+    } = dados
+  
+  
+    const paciente = {
+      paciente_id: uuidv4(),
+      nome,
+      data_nascimento,
+      email,
+      telefone,
+      status: true,
+      criacao_em: timestamp,
+      atualizacao_em: timestamp
+    }
+  
+    await dynamoDb
+      .put({
+        TableName: "PACIENTES",
+        Item: paciente,
+      })
+      .promise()
+  
+      return {
+        statusCode: 201,
+      }
+  } catch(err) {
+    console.log('Error', err)
+    return{
+      statusCode: err.statusCode ? err.statusCode : 500,
+      body: JSON.stringify({
+        error: err.name ? err.name : 'Exception',
+        message: err.message ? err.message : 'Unknown error'
+      })
+    }
+  }
+
+
+}
