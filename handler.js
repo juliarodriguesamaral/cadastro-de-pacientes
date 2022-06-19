@@ -121,3 +121,59 @@ module.exports.cadastrarPaciente = async (event) => {
 
 
 }
+
+module.exports.atualizarPaciente = async (event) => {
+  const { pacienteId } = event.pathParameters
+
+  try {
+    const timestamp = new Date().getTime()
+
+    let dados = JSON.parse(event.body)
+
+    const { nome, data_nascimento, email, telefone } = dados
+
+    await dynamoDb
+      .update({
+        ... params,
+        Key: {
+          paciente_id: pacienteId
+        },
+        UpdateExpression:
+          'SET nome = :nome, data_nascimento = :dt, email = :email,'
+          + ' telefone = :telefone, atualizacao_em = :atualizacao_em',
+        ConditionExpression: 'attribute_exists(paciente_id)',
+        ExpressionAttributeValues: {
+          ':nome': nome,
+          ':dt': data_nascimento,
+          ':email': email,
+          ':telefone': telefone,
+          ':atualizacao_em': timestamp
+        }
+      })
+      .promise()
+    return {
+      statusCode: 204,
+    }
+
+  } catch (err) {
+    console.log("Error", err)
+
+    let error = err.name ? err.name :  "Exception"
+    let message = err.message  ? err.message : "Unknown error"
+    let statusCode = err.statusCode ? err.statusCode : 500
+
+    if(error == 'ConditionalCheckFailedException') {
+      error = 'Paciente não existe'
+      message = `Recurso não pode ser atualizado porque o ID ${pacienteId} não existe`
+      statusCode = 404
+    }
+
+    return {
+      statusCode,
+      body: JSON.stringify({
+        error,
+        message
+      })
+    }
+  }
+}

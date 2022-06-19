@@ -16,6 +16,7 @@ provider:
       - dynamodb:PutItem
       - dynamodb:DeleteItem
       - dynamodb:GetItem
+      - dynamodb:UpdateItem
     Resource: arn:aws:dynamodb:us-east-1:288961078430:table/PACIENTES
 
 
@@ -40,6 +41,13 @@ functions:
       - http:
           path: pacientes
           method: post
+
+  atualizarPaciente:
+    handler: handler.atualizarPaciente
+    events:
+      - http:
+          path: pacientes/{pacienteId}
+          method: put
 
 plugins:
   - serverless-offline
