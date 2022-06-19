@@ -49,6 +49,12 @@ functions:
           path: pacientes/{pacienteId}
           method: put
 
+  excluirPaciente:
+    handler: handler.excluirPaciente
+    events:
+      - http:
+          path: pacientes/{pacienteId}
+          method: delete
 plugins:
   - serverless-offline
 
